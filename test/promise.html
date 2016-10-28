@@ -1,0 +1,151 @@
+<html>
+    <head>
+        <title>promise</title>
+    </head>
+    <body>
+    <div id="log"></div>
+    <button onclick="testPromise()">testPromise</button>
+    <script>
+        'use strict';
+        var promiseCount = 0;
+        function testPromise() {
+            var thisPromiseCount = ++promiseCount;
+
+            var log = document.getElementById('log');
+            log.insertAdjacentHTML('beforeend', thisPromiseCount + ') 开始(同步代码开始)<br/>');
+
+            // 我们创建一个新的promise: 然后用'result'字符串完成这个promise (3秒后)
+            var p1 = new Promise(function (resolve, reject) {
+                // 完成函数带着完成（resolve）或拒绝（reject）promise的能力被执行
+                log.insertAdjacentHTML('beforeend', thisPromiseCount + ') Promise开始(异步代码开始)<br/>');
+
+                var seconds = Math.random() * 2000 + 1000;
+                // 这只是个创建异步完成的示例
+                window.setTimeout(function () {
+                    // 我们满足（fullfil）了这个promise!
+                    if(seconds>2000){
+                        reject(thisPromiseCount)
+                    }else{
+                        resolve(thisPromiseCount)
+                    }
+                }, seconds);
+            });
+
+            // 定义当promise被满足时应做什么
+            p1.then(function (val) {
+                // 输出一段信息和一个值
+                log.insertAdjacentHTML('beforeend', val + ') Promise被满足了(异步代码结束)<br/><br/>');
+            }).catch(function (val) {
+                // 输出一段信息和一个值
+                log.insertAdjacentHTML('beforeend', val + ') Promise reject (异步代码结束)<br/><br/>');
+            });
+
+            log.insertAdjacentHTML('beforeend', thisPromiseCount + ') 建立了Promise(同步代码结束)<br/>');
+        }
+
+
+function $http(url){
+ 
+  // A small example of object
+  var core = {
+
+    // Method that performs the ajax request
+    ajax : function (method, url, args) {
+
+      // Creating a promise
+      var promise = new Promise( function (resolve, reject) {
+
+        // Instantiates the XMLHttpRequest
+        var client = new XMLHttpRequest();
+        var uri = url;
+
+        if (args && (method === 'POST' || method === 'PUT')) {
+          uri += '?';
+          var argcount = 0;
+          for (var key in args) {
+            if (args.hasOwnProperty(key)) {
+              if (argcount++) {
+                uri += '&';
+              }
+              uri += encodeURIComponent(key) + '=' + encodeURIComponent(args[key]);
+            }
+          }
+        }
+
+        client.open(method, uri);
+        client.send();
+
+        client.onload = function () {
+          console.log(this.status);
+          if (this.status >= 200 && this.status < 300) {
+            // Performs the function "resolve" when this.status is equal to 2xx
+            resolve(this.response);
+          } else {
+            // Performs the function "reject" when this.status is different than 2xx
+            reject(this.statusText);
+          }
+        };
+        client.onerror = function () {
+          reject(this.statusText);
+        };
+      });
+
+      // Return the promise
+      return promise;
+    }
+  };
+
+  // Adapter pattern
+  return {
+    'get' : function(args) {
+      return core.ajax('GET', url, args);
+    },
+    'post' : function(args) {
+      return core.ajax('POST', url, args);
+    },
+    'put' : function(args) {
+      return core.ajax('PUT', url, args);
+    },
+    'delete' : function(args) {
+      return core.ajax('DELETE', url, args);
+    }
+  };
+};
+// End A
+
+// B-> Here you define its functions and its payload
+var mdnAPI = 'search.json';
+var payload = {
+  'topic' : 'js',
+  'q'     : 'Promise'
+};
+
+var callback = {
+  success : function(data){
+     console.log(1, 'success', JSON.parse(data));
+  },
+  error : function(data){
+     console.log(2, 'error', JSON.parse(data));
+  }
+};
+// End B
+
+// Executes the method call 
+$http(mdnAPI) 
+  .get(payload) 
+  .then(callback.success) 
+  .catch(callback.error);
+
+// Executes the method call but an alternative way (1) to handle Promise Reject case 
+$http(mdnAPI) 
+  .get(payload) 
+  .then(callback.success, callback.error);
+
+// Executes the method call but an alternative way (2) to handle Promise Reject case 
+$http(mdnAPI) 
+  .get(payload) 
+  .then(callback.success)
+  .then(undefined, callback.error);
+    </script>
+    </body>
+</html>
