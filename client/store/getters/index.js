@@ -4,6 +4,9 @@ const getters = {
     },
     threeCount:state=>{
         return state.count *3
+    },
+    getData:state=>{
+        return state.data
     }
 }
 

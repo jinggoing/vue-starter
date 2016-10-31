@@ -1,5 +1,6 @@
 <template>
 <div>
+  <div>{{ data }}</div>
   <div class="counter" @click="$store.dispatch('incrementAsync')">
     {{ count }}
   </div>
@@ -19,6 +20,9 @@ export default {
   computed: {
     count() {
       return this.$store.state.count
+    },
+    data(){
+      return this.$store.state.data
     },
      ...mapGetters([
       'doubleCount',
