@@ -1,4 +1,4 @@
-# new-project
+# vue-starter
 
 To start:
 
