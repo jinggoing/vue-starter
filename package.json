@@ -9,7 +9,7 @@
     "dev": "node build/server.js",
     "lint": "eslint client/* --ext .js --ext .vue"
   },
-  "author": "jinxiong.hou <jinxiong.hou@aispeech.com>",
+  "author": "jinxiongh@126.com",
   "license": "MIT",
   "dependencies": {
     "vue": "^2.0.0",
